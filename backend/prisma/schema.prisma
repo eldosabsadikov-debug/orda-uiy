@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Property {
+  id                 String   @id @default(cuid())
+  titleKk            String
+  titleRu            String
+  descriptionKk      String
+  descriptionRu      String
+  price              Int
+  city               String
+  district           String
+  address            String?
+  propertyType       String
+  dealType           String
+  rooms              Int?
+  area               Float?
+  floor              Int?
+  totalFloors        Int?
+  yearBuilt          Int?
+  residentialComplex String?
+  material           String?
+  kitchenArea        Float?
+  ceilingHeight      Float?
+  bathroom           String?
+  balcony            String?
+  furniture          String?
+  mortgageAvailable  Boolean  @default(false)
+  instagram          String?
+  phone              String?
+  whatsapp           String?
+  extraNotes         String?
+  otherContacts      String?
+  landArea           Float?
+  houseArea          Float?
+  images             String[] @default([])
+  status             String   @default("active")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([status])
+  @@index([propertyType])
+  @@index([dealType])
+  @@index([city])
+  @@index([district])
+}

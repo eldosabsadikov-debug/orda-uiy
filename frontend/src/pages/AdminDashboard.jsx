@@ -1,0 +1,134 @@
+import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
+import { api } from "../api/client.js";
+import { buildQuery, formatPrice, labelFor } from "../utils/format.js";
+import { useLanguage } from "../context/LanguageContext.jsx";
+
+function AdminItemImage({ images = [], title }) {
+  const safeImages = images.length ? images : ["/images/no-image.svg"];
+  const [index, setIndex] = useState(0);
+  const hasMany = safeImages.length > 1;
+
+  function previous() {
+    setIndex((current) => (current === 0 ? safeImages.length - 1 : current - 1));
+  }
+
+  function next() {
+    setIndex((current) => (current === safeImages.length - 1 ? 0 : current + 1));
+  }
+
+  return (
+    <div className="admin-image-wrap">
+      <img src={safeImages[index]} alt={title} />
+      {hasMany && (
+        <>
+          <button className="admin-image-nav admin-image-prev" type="button" onClick={previous}>‹</button>
+          <button className="admin-image-nav admin-image-next" type="button" onClick={next}>›</button>
+          <span className="admin-image-count">{index + 1}/{safeImages.length}</span>
+        </>
+      )}
+    </div>
+  );
+}
+
+export default function AdminDashboard() {
+  const { lang, t } = useLanguage();
+  const [items, setItems] = useState([]);
+  const [filters, setFilters] = useState({ search: "", status: "", propertyType: "", dealType: "", sort: "newest" });
+  const [loading, setLoading] = useState(true);
+  const query = useMemo(() => buildQuery(filters), [filters]);
+
+  async function load() {
+    setLoading(true);
+    try {
+      const data = await api.getAdminProperties(query);
+      setItems(data.properties || []);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => { load(); }, [query]);
+
+  async function remove(id) {
+    if (!window.confirm(t("admin.deleteConfirm"))) return;
+    await api.deleteProperty(id);
+    load();
+  }
+
+  async function toggleStatus(property) {
+    const next = property.status === "active" ? "hidden" : "active";
+    await api.changeStatus(property.id, next);
+    load();
+  }
+
+  const activeCount = items.filter((item) => item.status === "active").length;
+  const hiddenCount = items.filter((item) => item.status === "hidden").length;
+
+  return (
+    <section className="page-section admin-section">
+      <div className="container">
+        <div className="admin-top">
+          <div>
+            <p className="eyebrow dark">Orda Uiy</p>
+            <h1>{t("admin.title")}</h1>
+            <p>{t("admin.subtitle")}</p>
+          </div>
+          <Link className="yellow-btn" to="/admin/new">{t("admin.add")}</Link>
+        </div>
+
+        <div className="stats-grid">
+          <div><strong>{items.length}</strong><span>{t("admin.total")}</span></div>
+          <div><strong>{activeCount}</strong><span>{t("admin.active")}</span></div>
+          <div><strong>{hiddenCount}</strong><span>{t("admin.hidden")}</span></div>
+        </div>
+
+        <div className="admin-filters">
+          <input value={filters.search} onChange={(e) => setFilters({ ...filters, search: e.target.value })} placeholder={t("common.search")} />
+          <select value={filters.status} onChange={(e) => setFilters({ ...filters, status: e.target.value })}>
+            <option value="">{t("common.all")}</option>
+            <option value="active">{t("common.active")}</option>
+            <option value="hidden">{t("common.hidden")}</option>
+            <option value="draft">{t("common.draft")}</option>
+          </select>
+          <select value={filters.propertyType} onChange={(e) => setFilters({ ...filters, propertyType: e.target.value })}>
+            <option value="">{t("filters.type")}</option>
+            <option value="apartment">{t("type.apartment")}</option>
+            <option value="house">{t("type.house")}</option>
+            <option value="commercial">{t("type.commercial")}</option>
+          </select>
+          <select value={filters.dealType} onChange={(e) => setFilters({ ...filters, dealType: e.target.value })}>
+            <option value="">{t("filters.deal")}</option>
+            <option value="sale">{t("deal.sale")}</option>
+            <option value="rent">{t("deal.rent")}</option>
+            <option value="subrent">{t("deal.subrent")}</option>
+          </select>
+        </div>
+
+        {loading ? <p>{t("common.loading")}</p> : (
+          <div className="admin-list">
+            {items.map((property) => {
+              const title = lang === "kk" ? property.titleKk : property.titleRu;
+              return (
+                <article className="admin-item" key={property.id}>
+                  <AdminItemImage images={property.images} title={title} />
+                  <div>
+                    <h3>{title}</h3>
+                    <p>{formatPrice(property.price)} · {property.city}{property.district ? `, ${property.district}` : ""}</p>
+                    <p>{labelFor(t, "type", property.propertyType)} · {labelFor(t, "deal", property.dealType)}</p>
+                  </div>
+                  <span className={`status-pill status-${property.status}`}>{t(`common.${property.status}`)}</span>
+                  <div className="admin-actions">
+                    <Link className="small-btn" to={`/admin/edit/${property.id}`}>{t("common.edit")}</Link>
+                    <button className="small-btn" type="button" onClick={() => toggleStatus(property)}>{property.status === "active" ? t("common.hide") : t("common.show")}</button>
+                    <button className="small-btn danger" type="button" onClick={() => remove(property.id)}>{t("common.delete")}</button>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
