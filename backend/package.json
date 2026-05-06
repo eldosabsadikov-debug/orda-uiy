@@ -20,6 +20,7 @@
     "helmet": "latest",
     "jsonwebtoken": "latest",
     "multer": "latest",
-    "prisma": "^6.19.0"
+    "prisma": "^6.19.0",
+    "ws": "^8.20.0"
   }
 }
