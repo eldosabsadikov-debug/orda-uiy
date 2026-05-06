@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Modal from "../components/Modal.jsx";
 import { useLanguage } from "../context/LanguageContext.jsx";
 
@@ -63,6 +64,10 @@ export default function Home() {
               <span className="card-number">03</span>
               <span className="card-title">{t("cards.contacts")}</span>
             </button>
+            <Link className="action-card" to="/apartments">
+            <span className="card-number">04</span>
+            <span className="card-title">{t("cards.apartments")}</span>
+            </Link>
           </div>
         </div>
       </section>

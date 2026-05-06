@@ -45,6 +45,7 @@ export default function FilterBar({ value, onChange }) {
         <option value="apartment">{t("type.apartment")}</option>
         <option value="house">{t("type.house")}</option>
         <option value="commercial">{t("type.commercial")}</option>
+        <option value="land">{t("type.land")}</option>
       </select>
       <select value={filters.dealType} onChange={(e) => update("dealType", e.target.value)}>
         <option value="">{t("filters.deal")}</option>

@@ -122,7 +122,7 @@ export default function PropertyEditor({ mode }) {
         <form className="editor-form" onSubmit={handleSubmit}>
           <fieldset>
             <legend>{t("form.basic")}</legend>
-            <label><span>{t("filters.type")}</span><select value={form.propertyType} onChange={(e) => update("propertyType", e.target.value)} required><option value="apartment">{t("type.apartment")}</option><option value="house">{t("type.house")}</option><option value="commercial">{t("type.commercial")}</option></select></label>
+            <label><span>{t("filters.type")}</span><select value={form.propertyType} onChange={(e) => update("propertyType", e.target.value)} required><option value="apartment">{t("type.apartment")}</option><option value="house">{t("type.house")}</option><option value="commercial">{t("type.commercial")}</option><option value="land">{t("type.land")}</option></select></label>
             <label><span>{t("filters.deal")}</span><select value={form.dealType} onChange={(e) => update("dealType", e.target.value)} required><option value="sale">{t("deal.sale")}</option><option value="rent">{t("deal.rent")}</option><option value="subrent">{t("deal.subrent")}</option></select></label>
             <label><span>{t("form.status")}</span><select value={form.status} onChange={(e) => update("status", e.target.value)} required><option value="active">{t("common.active")}</option><option value="hidden">{t("common.hidden")}</option><option value="draft">{t("common.draft")}</option></select></label>
           </fieldset>
@@ -143,7 +143,7 @@ export default function PropertyEditor({ mode }) {
 
           <fieldset>
             <legend>{t("form.details")}</legend>
-            <label><span>{t("filters.rooms")}</span><input type="number" value={form.rooms} onChange={(e) => update("rooms", e.target.value)} required /></label>
+            <label><span>{t("filters.rooms")}</span><input type="number" value={form.rooms} onChange={(e) => update("rooms", e.target.value)} required={form.propertyType !== "land"}/></label>
             <label><span>{t("form.area")}</span><input type="number" value={form.area} onChange={(e) => update("area", e.target.value)} required /></label>
             <label><span>{t("form.floor")}</span><input type="number" value={form.floor} onChange={(e) => update("floor", e.target.value)} /></label>
             <label><span>{t("form.totalFloors")}</span><input type="number" value={form.totalFloors} onChange={(e) => update("totalFloors", e.target.value)} /></label>
