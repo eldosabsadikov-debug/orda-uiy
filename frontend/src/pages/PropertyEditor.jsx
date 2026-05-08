@@ -3,7 +3,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { api } from "../api/client.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
 
-const MAX_IMAGE_SIZE = 30 * 1024 * 1024;
+const MAX_IMAGE_SIZE = 8 * 1024 * 1024;
+const MAX_IMAGE_COUNT = 30;
 
 const emptyForm = {
   title: "",

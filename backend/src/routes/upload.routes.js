@@ -13,7 +13,7 @@ const upload = multer({
   }
 });
 
-router.post("/", requireAdmin, upload.array("images", 15), uploadImages);
+router.post("/", requireAdmin, upload.array("images", 30), uploadImages);
 router.delete("/", requireAdmin, deleteImages);
 
 export default router;
