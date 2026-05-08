@@ -37,5 +37,6 @@ export const api = {
   updateProperty: (id, payload) => request(`/api/admin/properties/${id}`, { method: "PUT", body: JSON.stringify(payload) }),
   deleteProperty: (id) => request(`/api/admin/properties/${id}`, { method: "DELETE" }),
   changeStatus: (id, status) => request(`/api/admin/properties/${id}/status`, { method: "PATCH", body: JSON.stringify({ status }) }),
-  uploadImages: (formData) => request("/api/uploads", { method: "POST", body: formData })
+  uploadImages: (formData) => request("/api/uploads", { method: "POST", body: formData }),
+  deleteImages: (urls) => request("/api/uploads", { method: "DELETE", body: JSON.stringify({ urls }) })
 };

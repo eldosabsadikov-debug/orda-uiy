@@ -3,31 +3,57 @@ import { Link } from "react-router-dom";
 import { api } from "../api/client.js";
 import { buildQuery, formatPrice, labelFor } from "../utils/format.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
+import ImageLightbox from "../components/ImageLightbox.jsx";
 
 function AdminItemImage({ images = [], title }) {
   const safeImages = images.length ? images : ["/images/no-image.svg"];
   const [index, setIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const hasMany = safeImages.length > 1;
 
-  function previous() {
+  function previous(event) {
+    event.stopPropagation();
     setIndex((current) => (current === 0 ? safeImages.length - 1 : current - 1));
   }
 
-  function next() {
+  function next(event) {
+    event.stopPropagation();
     setIndex((current) => (current === safeImages.length - 1 ? 0 : current + 1));
   }
 
   return (
-    <div className="admin-image-wrap">
-      <img src={safeImages[index]} alt={title} />
-      {hasMany && (
-        <>
-          <button className="admin-image-nav admin-image-prev" type="button" onClick={previous}>‹</button>
-          <button className="admin-image-nav admin-image-next" type="button" onClick={next}>›</button>
-          <span className="admin-image-count">{index + 1}/{safeImages.length}</span>
-        </>
-      )}
-    </div>
+    <>
+      <div
+        className="admin-image-wrap clickable-image"
+        role="button"
+        tabIndex={0}
+        onClick={() => setLightboxOpen(true)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            setLightboxOpen(true);
+          }
+        }}
+      >
+        <img src={safeImages[index]} alt={title} loading="lazy" decoding="async" />
+
+        {hasMany && (
+          <>
+            <button className="admin-image-nav admin-image-prev" type="button" onClick={previous}>‹</button>
+            <button className="admin-image-nav admin-image-next" type="button" onClick={next}>›</button>
+            <span className="admin-image-count">{index + 1}/{safeImages.length}</span>
+          </>
+        )}
+      </div>
+
+      <ImageLightbox
+        images={safeImages}
+        startIndex={index}
+        title={title}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+      />
+    </>
   );
 }
 
