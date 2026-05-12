@@ -1136,3 +1136,264 @@ img { max-width: 100%; }
     height: 180px;
   }
 }
+
+
+/* ================================
+   Mobile admin/header responsive fix
+   Fixes 0–404px and 421–436px widths
+================================ */
+
+.site-header {
+  overflow: visible;
+}
+
+.header-inner {
+  min-width: 0;
+}
+
+.brand {
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.brand img,
+.brand-logo {
+  flex-shrink: 1;
+  object-fit: contain;
+}
+
+/* Common header right side containers */
+.header-actions,
+.header-controls,
+.nav-actions,
+.header-right {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* Admin dropdown button: make it smaller on mobile */
+.admin-trigger,
+.admin-button,
+.admin-toggle,
+.admin-menu-button,
+.admin-dropdown > button {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Tablet-small and big phones */
+@media (max-width: 520px) {
+  .site-header .container {
+    width: min(100% - 16px, 1180px);
+  }
+
+  .header-inner {
+    min-height: 72px;
+    padding: 8px 0;
+    gap: 8px;
+  }
+
+  .brand-logo,
+  .brand img {
+    width: auto;
+    height: 38px;
+    max-width: 112px;
+  }
+
+  .language-switcher {
+    flex-shrink: 0;
+    padding: 5px 7px;
+    gap: 4px;
+  }
+
+  .lang-btn {
+    padding: 5px 7px;
+    font-size: 13px;
+  }
+
+  .lang-divider {
+    font-size: 13px;
+  }
+
+  .admin-trigger,
+  .admin-button,
+  .admin-toggle,
+  .admin-menu-button,
+  .admin-dropdown > button {
+    width: 58px;
+    min-width: 58px;
+    height: 58px;
+    padding: 0;
+    border-radius: 999px;
+    font-size: 13px;
+    line-height: 1.05;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .admin-trigger span,
+  .admin-button span,
+  .admin-toggle span,
+  .admin-menu-button span,
+  .admin-dropdown > button span {
+    display: block;
+    line-height: 1.05;
+  }
+
+  .menu-toggle,
+  .mobile-menu-button,
+  .burger-button {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    flex-shrink: 0;
+  }
+
+  .page-section {
+    padding-top: 46px;
+  }
+}
+
+/* Very small phones: 0–404px */
+@media (max-width: 404px) {
+  .site-header .container {
+    width: min(100% - 12px, 1180px);
+  }
+
+  .header-inner {
+    gap: 6px;
+    min-height: 68px;
+  }
+
+  .brand-logo,
+  .brand img {
+    height: 32px;
+    max-width: 88px;
+  }
+
+  .language-switcher {
+    padding: 4px 5px;
+    gap: 2px;
+  }
+
+  .lang-btn {
+    padding: 4px 5px;
+    font-size: 12px;
+  }
+
+  .lang-divider {
+    font-size: 12px;
+  }
+
+  .admin-trigger,
+  .admin-button,
+  .admin-toggle,
+  .admin-menu-button,
+  .admin-dropdown > button {
+    width: 52px;
+    min-width: 52px;
+    height: 52px;
+    font-size: 12px;
+  }
+
+  .menu-toggle,
+  .mobile-menu-button,
+  .burger-button {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+  }
+
+  .page-heading h1 {
+    font-size: clamp(2rem, 10vw, 3rem);
+    line-height: 1.05;
+  }
+
+  .page-heading p {
+    font-size: 1rem;
+  }
+
+  .admin-stats,
+  .stats-grid {
+    gap: 10px;
+  }
+
+  .stat-card,
+  .admin-stat-card {
+    padding: 18px;
+    border-radius: 18px;
+  }
+}
+
+/* Problem range around 421–436px */
+@media (min-width: 405px) and (max-width: 436px) {
+  .site-header .container {
+    width: min(100% - 14px, 1180px);
+  }
+
+  .header-inner {
+    gap: 7px;
+  }
+
+  .brand-logo,
+  .brand img {
+    height: 34px;
+    max-width: 98px;
+  }
+
+  .language-switcher {
+    padding: 4px 6px;
+    gap: 3px;
+  }
+
+  .lang-btn {
+    padding: 4px 6px;
+    font-size: 12px;
+  }
+
+  .admin-trigger,
+  .admin-button,
+  .admin-toggle,
+  .admin-menu-button,
+  .admin-dropdown > button {
+    width: 54px;
+    min-width: 54px;
+    height: 54px;
+    font-size: 12px;
+  }
+
+  .menu-toggle,
+  .mobile-menu-button,
+  .burger-button {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+  }
+}
+
+/* Admin page content mobile spacing */
+@media (max-width: 520px) {
+  .admin-page,
+  .admin-dashboard,
+  .editor-wrap {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .admin-actions,
+  .form-actions,
+  .pagination-actions {
+    width: 100%;
+  }
+
+  .admin-actions .yellow-btn,
+  .form-actions .yellow-btn,
+  .yellow-btn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+}
