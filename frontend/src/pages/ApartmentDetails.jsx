@@ -5,6 +5,7 @@ import { api } from "../api/client.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import { formatPrice, labelFor } from "../utils/format.js";
 import { mockProperties } from "../data/mockProperties.js";
+import { DetailSkeleton } from "../components/Skeletons.jsx";
 
 export default function ApartmentDetails() {
   const { id } = useParams();
@@ -22,8 +23,12 @@ export default function ApartmentDetails() {
   }, [id]);
 
   if (loading) {
-    return <section className="page-section"><div className="container"><p>{t("common.loading")}</p></div></section>;
-  }
+    return (
+    <section className="page-section">
+      <DetailSkeleton />
+      </section>
+      );
+    }
 
   if (!property) {
     return <section className="page-section"><div className="container"><div className="empty-state">{t("apartments.empty")}</div></div></section>;

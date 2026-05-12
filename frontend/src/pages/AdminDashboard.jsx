@@ -4,6 +4,7 @@ import { api } from "../api/client.js";
 import { buildQuery, formatPrice, labelFor } from "../utils/format.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import ImageLightbox from "../components/ImageLightbox.jsx";
+import { AdminListSkeleton } from "../components/Skeletons.jsx";
 
 function AdminItemImage({ images = [], title }) {
   const safeImages = images.length ? images : ["/images/no-image.svg"];
@@ -61,14 +62,16 @@ export default function AdminDashboard() {
   const { lang, t } = useLanguage();
   const [items, setItems] = useState([]);
   const [filters, setFilters] = useState({ search: "", status: "", propertyType: "", dealType: "", sort: "newest" });
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(true);
-  const query = useMemo(() => buildQuery(filters), [filters]);
+  const query = useMemo(() => buildQuery({ ...filters, page, limit: 10 }), [filters, page]);
 
   async function load() {
     setLoading(true);
     try {
       const data = await api.getAdminProperties(query);
-      setItems(data.properties || []);
+      setItems(data.properties || null);
     } finally {
       setLoading(false);
     }
@@ -110,7 +113,7 @@ export default function AdminDashboard() {
         </div>
 
         <div className="admin-filters">
-          <input value={filters.search} onChange={(e) => setFilters({ ...filters, search: e.target.value })} placeholder={t("common.search")} />
+          <input value={filters.search} onChange={(e) => { setPage(1); setFilters({ ...filters, search: e.target.value }); }} placeholder={t("common.search")} />
           <select value={filters.status} onChange={(e) => setFilters({ ...filters, status: e.target.value })}>
             <option value="">{t("common.all")}</option>
             <option value="active">{t("common.active")}</option>
@@ -132,8 +135,33 @@ export default function AdminDashboard() {
           </select>
         </div>
 
-        {loading ? <p>{t("common.loading")}</p> : (
+        {loading ? <AdminListSkeleton count={5} /> : (
           <div className="admin-list">
+            {pagination && pagination.totalPages > 1 && (
+              <div className="pagination-actions">
+                <button
+                  className="ghost-btn"
+                  type="button"
+                  disabled={!pagination.hasPrev}
+                  onClick={() => setPage((current) => Math.max(current - 1, 1))}
+                >
+                  {t("common.previous")}
+                </button>
+
+                <span className="pagination-info">
+                  {pagination.page} / {pagination.totalPages}
+                </span>
+
+                <button
+                  className="ghost-btn"
+                  type="button"
+                  disabled={!pagination.hasNext}
+                  onClick={() => setPage((current) => current + 1)}
+                >
+                  {t("common.next")}
+                </button>
+              </div>
+            )}
             {items.map((property) => {
               const title = lang === "kk" ? property.titleKk : property.titleRu;
               return (

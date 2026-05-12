@@ -101,6 +101,18 @@ export default function PropertyEditor({ mode }) {
 
   async function handleUpload(event) {
     const files = Array.from(event.target.files || []);
+    
+    const availableSlots = MAX_IMAGE_COUNT - imageUrls.length;
+    if (availableSlots <= 0) {
+      alert(t("form.imageCountError"));
+      event.target.value = "";
+      return;
+    }
+    if (files.length > availableSlots) {
+      alert(t("form.imageCountError"));
+      event.target.value = "";
+      return;
+    }
 
     if (!files.length) return;
 
