@@ -40,7 +40,7 @@ export default function Header() {
     <header className="site-header" ref={headerRef}>
       <div className="container header-inner">
         <Link className="brand" to="/" aria-label="Orda Uiy" onClick={closeMenus}>
-          <img src="/images/logo.jpg" alt="Orda Uiy" className="brand-logo" />
+          <img src="/images/logo2.png" alt="Orda Uiy" className="brand-logo" />
         </Link>
 
         <nav className={`main-nav ${menuOpen ? "is-open" : ""}`} aria-label="Навигация">
